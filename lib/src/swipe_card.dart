@@ -34,7 +34,7 @@ class SwipeCard extends StatelessWidget {
       },
       onPanUpdate: (details) {
         final _controller = context.read<SwipeController>();
-        _controller.updatePoisiton(details);
+        _controller.updatePosition(details);
       },
       onPanEnd: (_) {
         final _controller = context.read<SwipeController>();

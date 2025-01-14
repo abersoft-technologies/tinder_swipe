@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'swipe_controller.dart';
 import 'swipe_container.dart';
+import 'swipe_controller.dart';
 
 class TinderSwipe<T> extends StatelessWidget {
   const TinderSwipe({
