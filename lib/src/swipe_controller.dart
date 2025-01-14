@@ -6,14 +6,13 @@ import 'package:tinder_swipe/src/swipe_child.dart';
 enum CardStatus { like, dislike, removed, rewind, none }
 
 class SwipeController<T> extends ChangeNotifier {
-  Function(CardStatus status, int length, T? data) callback =
-      ((status, length, data) {});
-  Function(T? data) nextCardCallback = ((data) {});
+  Function(CardStatus status, int length, T? data)? callback;
+  Function(T? data)? nextCardCallback;
 
-  void initCallback(
-    Function(CardStatus status, int length, T? data) callback,
-    Function(T? data) nextCardCallback,
-  ) {
+  void initCallback({
+    Function<T>(CardStatus status, int length, T? data)? callback,
+    Function<T>(T? data)? nextCardCallback,
+  }) {
     this.callback = callback;
     this.nextCardCallback = nextCardCallback;
   }
@@ -153,8 +152,8 @@ class SwipeController<T> extends ChangeNotifier {
     await Future.delayed(const Duration(milliseconds: 400));
     final lastData = _data.removeLast();
     notifyListeners();
-    callback(prevStatus ?? CardStatus.none, data.length, lastData);
-    if (_data.isNotEmpty) nextCardCallback(_data.last);
+    callback?.call(prevStatus ?? CardStatus.none, data.length, lastData);
+    if (_data.isNotEmpty) nextCardCallback?.call(_data.last);
     resetPosition();
   }
 
@@ -175,7 +174,7 @@ class SwipeController<T> extends ChangeNotifier {
     _angle = 0;
     _position = const Offset(0, 0);
     notifyListeners();
-    callback(CardStatus.rewind, data.length, data.last);
+    callback?.call(CardStatus.rewind, data.length, data.last);
   }
 
   void resetPosition() {
