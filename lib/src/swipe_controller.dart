@@ -8,8 +8,14 @@ enum CardStatus { like, dislike, removed, rewind, none }
 class SwipeController<T> extends ChangeNotifier {
   Function(CardStatus status, int length, T? data) callback =
       ((status, length, data) {});
-  void initCallback(Function(CardStatus status, int length, T? data) callback) {
+  Function(T? data) nextCardCallback = ((data) {});
+
+  void initCallback(
+    Function(CardStatus status, int length, T? data) callback,
+    Function(T? data) nextCardCallback,
+  ) {
     this.callback = callback;
+    this.nextCardCallback = nextCardCallback;
   }
 
   CardStatus? prevStatus;
@@ -48,7 +54,7 @@ class SwipeController<T> extends ChangeNotifier {
     _isDragging = true;
   }
 
-  void updatePoisiton(DragUpdateDetails details) {
+  void updatePosition(DragUpdateDetails details) {
     _position += details.delta;
 
     final x = _position.dx;
@@ -148,6 +154,7 @@ class SwipeController<T> extends ChangeNotifier {
     final lastData = _data.removeLast();
     notifyListeners();
     callback(prevStatus ?? CardStatus.none, data.length, lastData);
+    if (_data.isNotEmpty) nextCardCallback(_data.last);
     resetPosition();
   }
 
